@@ -1,0 +1,33 @@
+---
+education:
+  template: jolla
+  id: education-block
+  image: "images/global_selfie.jpg"
+   links:
+    - icon: github
+      text: Github
+      href: https://github.com/lillyspeier/
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/lillyspeier/
+    - icon: instagram
+      text: Instagram
+      href: https://instagram.com/lillyspeier/
+    - icon: envelope
+      text: Email
+      href: "mailto:lxs850@case.edu"  
+---
+
+::: {#education-block}
+:::
+
+# Welcome to my website!
+
+text
+
+```{=html}
+<div  style="margin: 30px; text-align: center;">
+<a class="btn btn-primary" href="https://www.marvinschmitt.com/blog/website-tutorial-quarto/" role="button" target="_blank" style="padding: 15px 30px;">View the tutorial for this template (+ download link)</a>
+</div>
+```
+
