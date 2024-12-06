@@ -1,34 +1,17 @@
 ---
-aboutme:
-  template: jolla
-  id: aboutme-block
-  image: "images/global_selfie.jpg"
-  links:
-     links:
-    - icon: github
-      text: Github
-      href: https://github.com/lillyspeier/
-    - icon: linkedin
-      text: LinkedIn
-      href: https://www.linkedin.com/in/lillyspeier/
-    - icon: instagram
-      text: Instagram
-      href: https://instagram.com/lillyspeier/
-    - icon: envelope
-      text: Email
-      href: "mailto:lxs850@case.edu"  
+title: "About Me"
 ---
 
-::: {#aboutme-block}
+Hi, my name is Lilly Speier and I'm from Hartland, Michigan. Outside of my academic and professional life, some of my interests include cooking, baking, doing yoga, and spending time with my family. I love to cook and bake labor-intensive dishes, partially for the challenge, but also to give as gifts. Some of my favorite dishes I've made are lasagna inspired by the show *The Sopranos*, and cream puffs with hand-whipped cream. My next goal is to make a croquembouche, which is essentially a cone-shaped tower of cream puffs which is held together by homemade caramel.
+
+::: {layout-ncol="2"}
+![](~/Documents/GitHub/lillyspeier.github.io/images/lasagna.jpg)
+
+![](~/Documents/GitHub/lillyspeier.github.io/images/cream_puff.jpg)
 :::
 
-# Welcome to my website!
+I also like to do yoga
 
-placeholder text
-
-```{=html}
-<div  style="margin: 30px; text-align: center;">
+::: {style="margin: 30px; text-align: center;"}
 <a class="btn btn-primary" href="https://www.marvinschmitt.com/blog/website-tutorial-quarto/" role="button" target="_blank" style="padding: 15px 30px;">View the tutorial for this template (+ download link)</a>
-</div>
-```
-
+:::
