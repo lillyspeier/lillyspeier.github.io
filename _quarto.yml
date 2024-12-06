@@ -15,12 +15,15 @@ website:
     
     # your sub-pages
     left:
-      - text: "Projects"
-        href: projects/index.qmd
       - text: "About Me"
-        href: photography/index.qmd
+        href: About_Me/index_about_me.qmd
+      - text: "Education"
+        href: Education/index_education.qmd
+      - text: "Projects"
+        href: Projects/index_projects.qmd
       - text: "CV"
-        href: cv/index.qmd
+        href: cv/index_CV.qmd
+        
     
     # your social media handles
     right:
