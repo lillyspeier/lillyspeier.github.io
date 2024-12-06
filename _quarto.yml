@@ -6,12 +6,12 @@ website:
   description: "Biomedical Engineering PhD Student- Hubert Lab"   
   image: images/global_selfie.jpg
   
-  favicon: images/cwru-logo-formal.png
+  favicon: images/case-western-reserve-university-logo-png_seeklogo-520624.png
   
   # start of the navigation bar at the top of the website
   navbar:
     pinned: true
-    logo: /images/cwru-logo-formal.png
+    logo: /images/case-western-reserve-university-logo-png_seeklogo-520624.png
     
     # your sub-pages
     left:

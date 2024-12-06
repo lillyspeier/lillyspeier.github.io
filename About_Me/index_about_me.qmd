@@ -2,8 +2,6 @@
 title: "About Me"
 ---
 
-# About Me
-
 Hi, my name is Lilly Speier and I'm from Hartland, Michigan. Outside of my academic and professional life, some of my interests include cooking, baking, doing yoga, and spending time with my family. I love to cook and bake labor-intensive dishes, partially for the challenge, but also to give as gifts. Some of my favorite dishes I've made are lasagna inspired by the show *The Sopranos*, and cream puffs with hand-whipped cream. My next goal is to make a croquembouche, which is essentially a cone-shaped tower of cream puffs which is held together by homemade caramel.
 
 ::: {layout-ncol="2"}
