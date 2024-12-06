@@ -29,8 +29,6 @@ In addition to my PhD project, this website will also showcase some of my underg
 
 While this website is mostly intended to showcase my academic and professional work, you can also find some of my personal interests and additional information under the "About Me" tab above. I invite you to explore my website and learn more about my research, future endeavors. Please feel free to [contact me](mailto:lxs850@case.edu) if you have any questions or would like to discuss potential projects!
 
-```{=html}
-<div  style="margin: 30px; text-align: center;">
+::: {style="margin: 30px; text-align: center;"}
 <a class="btn btn-primary" href="https://www.marvinschmitt.com/blog/website-tutorial-quarto/" role="button" target="_blank" style="padding: 15px 30px;">View the tutorial for this template (+ download link)</a>
-</div>
-```
+:::
