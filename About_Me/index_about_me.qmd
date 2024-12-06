@@ -4,7 +4,7 @@ title: "About Me"
 
 Hi, my name is Lilly Speier and I'm from Hartland, Michigan. Outside of my academic and professional life, some of my interests include cooking, baking, doing yoga, and spending time with my family. I love to cook and bake labor-intensive dishes, partially for the challenge, but also to give as gifts. Some of my favorite dishes I've made are lasagna inspired by the show *The Sopranos*, and cream puffs with hand-whipped cream. My next goal is to make a croquembouche, which is essentially a cone-shaped tower of cream puffs which is held together by homemade caramel.
 
-::: {layout-ncol="2"}
+::: {layout-ncol="1"}
 ![](~/Documents/GitHub/lillyspeier.github.io/images/family_pic.jpg) From left to right, this is my little sister Leah, myself, my dad David, and my mom Heather.
 
 ![](~/Documents/GitHub/lillyspeier.github.io/images/lasagna.jpg) This is the lasagna I made for my dad for Father's Day, inspired by the discussion about Carmela's lasagna in season 4 episode 5 of *The Sopranos*.

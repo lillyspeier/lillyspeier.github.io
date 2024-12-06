@@ -2,8 +2,6 @@
 title: "Education"
 ---
 
-# Education
-
 ::: {layout-ncol="2"}
 ![](~/Documents/GitHub/lillyspeier.github.io/images/cwru-logo-formal.png)
 
