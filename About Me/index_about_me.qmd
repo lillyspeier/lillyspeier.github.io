@@ -10,7 +10,7 @@ Hi, my name is Lilly Speier and I'm from Hartland, Michigan. Outside of my acade
 ![](~/Documents/GitHub/lillyspeier.github.io/images/cream_puff.jpg)
 :::
 
-I also like to do yoga
+I also enjoy doing yoga, specifically under the guidance of YouTube videos from Adriene Mishler's channel, [Yoga With Adriene](https://www.youtube.com/user/yogawithadriene). I struggle with chronic headaches and an autoimmune disorder, called ankylosing spondylitis (AS), which primarily attacks the spine, hips, and sacroiliac joints. Over time and without proper treatment, AS can cause vertebral fusion, resulting in a rigid "bamboo" spine and hunched posture. While there is no cure for AS, biologic medications and staying active can help prevent this fusion. Since yoga is a low impact exercise, it doesn't trigger any of my symptoms and it helps me maintain regular movement throughout my spine. One of the best parts of Adriene's channel is that she has very specific and targeted practices. Some of my favorite practices of her's are [yoga for migraines](https://youtu.be/QFkAl5wHEbg?si=ZEYimDYDyPs0ct6V), [tension release](https://youtu.be/aKsu112bzHE?si=yh1jk68pDvALpJ9k), [hips and back release](https://youtu.be/Ho9em79_0qg?si=KY-HvpZ2BMx6befC), and [bedtime yoga](https://youtu.be/v7SN-d4qXx0?si=ywb0xr_28nf1iGXH).
 
 ::: {style="margin: 30px; text-align: center;"}
 <a class="btn btn-primary" href="https://www.marvinschmitt.com/blog/website-tutorial-quarto/" role="button" target="_blank" style="padding: 15px 30px;">View the tutorial for this template (+ download link)</a>

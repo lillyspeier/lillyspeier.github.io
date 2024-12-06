@@ -1,0 +1,37 @@
+---
+about:
+  template: jolla
+  id: about-block
+  image: "images/global_selfie.jpg"
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/lillyspeier/
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/lillyspeier/
+    - icon: instagram
+      text: Instagram
+      href: https://instagram.com/lillyspeier/
+    - icon: envelope
+      text: Email
+      href: "mailto:lxs850@case.edu"  
+---
+
+::: {#about-block}
+:::
+
+# Welcome to my website!
+
+I am Lilly Speier, a Biomedical Engineering PhD student in the Hubert Lab at Case Western Reserve University (CWRU). In the Hubert Lab, we study glioblastoma multiforme (GBM), which is the most aggressive form of primary brain tumor in adults. My work aims to combine the advantages of microfluidics and 3D cell culture to develop complex, vascularized, patient-derived glioblastoma organoids in order to investigate the role of a gene, called WDR5, in GBM tumor invasion. WDR5 has been identified as a critical contributor in therapeutic resistance and epigenetic regulation of GBM, and I believe it may be partially responsible for the destructive nature and poor prognosis associated with GBM tumors.
+
+In addition to my PhD project, this website will also showcase some of my undergraduate work from my time at Trine University, where I earned my BS in Biomedical Engineering, and my research experience for undergraduates (REU) at the University of Georgia. At Trine, some of my work includes the generation of a medical simulation device for learning and teaching cardiac catheterization procedures, and research on the impact of space environmental effects on the lymphatic system in the context of astronaut health. These projects were funded by Parkview Health of Fort Wayne, Indiana and the Indiana Space Grant Consortium, respectively. During my REU in Georgia, I worked in the Karumbaiah Lab, where my project was assessing the efficacy of CAR T-cell therapy using a glioblastoma-on-chip microfluidic platform. More information on these projects can be found under the "Projects" tab above.
+
+While this website is mostly intended to showcase my academic and professional work, you can also find some of my personal interests and additional information under the "About Me" tab above. I invite you to explore my website and learn more about my research, future endeavors. Please feel free to [contact me](mailto:lxs850@case.edu) if you have any questions or would like to discuss potential projects!
+
+```{=html}
+<div  style="margin: 30px; text-align: center;">
+<a class="btn btn-primary" href="https://www.marvinschmitt.com/blog/website-tutorial-quarto/" role="button" target="_blank" style="padding: 15px 30px;">View the tutorial for this template (+ download link)</a>
+</div>
+```
+
