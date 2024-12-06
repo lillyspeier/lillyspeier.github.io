@@ -22,7 +22,7 @@ website:
       - text: "Projects"
         href: Projects/index_projects.qmd
       - text: "CV"
-        href: cv/index_CV.qmd
+        href: Cv/index_CV.qmd
         
     
     # your social media handles
