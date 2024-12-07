@@ -5,11 +5,11 @@ title: "About Me"
 Hi, my name is Lilly Speier and I'm from Hartland, Michigan. Outside of my academic and professional life, some of my interests include cooking, baking, doing yoga, and spending time with my family. I love to cook and bake labor-intensive dishes, partially for the challenge, but also to give as gifts. Some of my favorite dishes I've made are lasagna inspired by the show *The Sopranos*, and cream puffs with hand-whipped cream. My next goal is to make a croquembouche, which is essentially a cone-shaped tower of cream puffs which is held together by homemade caramel.
 
 ::: {layout-ncol="1"}
-![](~/Documents/GitHub/lillyspeier.github.io/images/family_pic.jpg) From left to right, this is my little sister Leah, myself, my dad David, and my mom Heather.
+![](images/family_pic.jpg) From left to right, this is my little sister Leah, myself, my dad David, and my mom Heather.
 
-![](~/Documents/GitHub/lillyspeier.github.io/images/lasagna.jpg) This is the lasagna I made for my dad for Father's Day, inspired by the discussion about Carmela's lasagna in season 4 episode 5 of *The Sopranos*.
+![](images/lasagna.jpg) This is the lasagna I made for my dad for Father's Day, inspired by the discussion about Carmela's lasagna in season 4 episode 5 of *The Sopranos*.
 
-![](~/Documents/GitHub/lillyspeier.github.io/images/cream_puff.jpg) This is a hot fudge cream puff with ice cream and hand-whipped cream that I made for my mom for Mother's Day. Our family prefers using a Michigan classic for this dish, Sander's milk chocolate hot fudge.
+![](images/cream_puff.jpg) This is a hot fudge cream puff with ice cream and hand-whipped cream that I made for my mom for Mother's Day. Our family prefers using a Michigan classic for this dish, Sander's milk chocolate hot fudge.
 :::
 
 I also enjoy doing yoga, specifically under the guidance of YouTube videos from Adriene Mishler's channel, [Yoga With Adriene](https://www.youtube.com/user/yogawithadriene). I struggle with chronic headaches and an autoimmune disorder, called ankylosing spondylitis (AS), which primarily attacks the spine, hips, and sacroiliac joints. Over time and without proper treatment, AS can cause vertebral fusion, resulting in a rigid "bamboo" spine and hunched posture. While there is no cure for AS, biologic medications and staying active can help prevent this fusion. Since yoga is a low impact exercise, it doesn't trigger any of my symptoms and it helps me maintain regular movement throughout my spine. One of the best parts of Adriene's channel is that she has very specific and targeted practices. Some of my favorite practices of her's are [yoga for migraines](https://youtu.be/QFkAl5wHEbg?si=ZEYimDYDyPs0ct6V), [tension release](https://youtu.be/aKsu112bzHE?si=yh1jk68pDvALpJ9k), [hips and back release](https://youtu.be/Ho9em79_0qg?si=KY-HvpZ2BMx6befC), and [bedtime yoga](https://youtu.be/v7SN-d4qXx0?si=ywb0xr_28nf1iGXH).

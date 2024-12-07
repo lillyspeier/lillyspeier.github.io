@@ -4,17 +4,13 @@ title: "Education"
 
 ![](images/cwru-logo-formal.png)
 
-**Case Western Reserve University**, Cleveland, Ohio
-School of Engineering and School of Medicine
-Doctor of Philosophy in Biomedical Engineering (2023 - Current)
+**Case Western Reserve University**, Cleveland, Ohio School of Engineering and School of Medicine Doctor of Philosophy in Biomedical Engineering (2023 - Current)
 
-
+::: {style="text-align: center;"}
 ![](images/trine_logo.jpg)
+:::
 
-**Trine University**, Angola, Indiana
-Allen School of Engineering and Computing
-Bachelor's of Science in Biomedical Engineering (2018 - 2023)
-
+**Trine University**, Angola, Indiana Allen School of Engineering and Computing Bachelor's of Science in Biomedical Engineering (2018 - 2023)
 
 ::: {style="margin: 30px; text-align: center;"}
 <a class="btn btn-primary" href="https://www.marvinschmitt.com/blog/website-tutorial-quarto/" role="button" target="_blank" style="padding: 15px 30px;">View the tutorial for this template (+ download link)</a>

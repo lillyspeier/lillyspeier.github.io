@@ -1,0 +1,91 @@
+{
+  "cells": [
+    {
+      "cell_type": "raw",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "cv:\n",
+        "  template: jolla\n",
+        "  id: cv-block\n",
+        "  image: \"images/global_selfie.jpg\"\n",
+        "  links:\n",
+        "    - icon: github\n",
+        "      text: Github\n",
+        "      href: https://github.com/lillyspeier/\n",
+        "    - icon: linkedin\n",
+        "      text: LinkedIn\n",
+        "      href: https://www.linkedin.com/in/lillyspeier/\n",
+        "    - icon: instagram\n",
+        "      text: Instagram\n",
+        "      href: https://instagram.com/lillyspeier/\n",
+        "    - icon: envelope\n",
+        "      text: Email\n",
+        "      href: \"mailto:lxs850@case.edu\"  \n",
+        "---\n",
+        "\n",
+        "---"
+      ],
+      "id": "431f75fb"
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "layout: page\n",
+        "title: Curriculum vitae\n",
+        "excerpt: My current CV\n",
+        "execute:\n",
+        "  freeze: true  # never re-render during project render\n",
+        "engine: knitr \n",
+        "resources:\n",
+        "  - \"updated_resume.pdf\"\n",
+        "cv:\n",
+        "  pdf: \"updated_resume.pdf\"\n",
+        "---\n",
+        "\n",
+        "```{css echo=FALSE}\n",
+        ".embed-container {\n",
+        "    position: relative;\n",
+        "    padding-bottom: 129%;\n",
+        "    height: 0;\n",
+        "    overflow: hidden;\n",
+        "    max-width: 100%;\n",
+        "}\n",
+        ".embed-container iframe,\n",
+        ".embed-container object,\n",
+        ".embed-container embed {\n",
+        "    position: absolute;\n",
+        "    top: 0;\n",
+        "    left: 0;\n",
+        "    width: 100%;\n",
+        "    height: 100%;\n",
+        "}\n",
+        "```\n",
+        "\n",
+        "\n",
+        "<p class=\"text-center\">\n",
+        "  <a class=\"btn btn-primary btn-lg cv-download\" href=\"`r rmarkdown::metadata$cv$pdf`\" target=\"_blank\">\n",
+        "    <i class=\"fa-solid fa-file-arrow-down\"></i>&ensp;Download current CV\n",
+        "  </a>\n",
+        "</p>\n",
+        "<div class=\"embed-container\">\n",
+        "  <iframe src=\"`r rmarkdown::metadata$cv$pdf`#toolbar=0\" style=\"border: 0.5px;width: 100%;\"></iframe>\n",
+        "</div>\n",
+        "<div  style=\"margin: 30px; text-align: center;\">\n",
+        "<a class=\"btn btn-primary\" href=\"https://www.marvinschmitt.com/blog/website-tutorial-quarto/\" role=\"button\" target=\"_blank\" style=\"padding: 15px 30px;\">View the tutorial for this template (+ download link)</a>\n",
+        "</div>"
+      ],
+      "id": "d62712d0"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
