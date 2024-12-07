@@ -2,19 +2,19 @@
 title: "Education"
 ---
 
-::: {layout-ncol="2"}
-![](~/Documents/GitHub/lillyspeier.github.io/images/cwru-logo-formal.png)
+![](~/Documents/GitHub/lillyspeier.github.io/Education/cwru-logo-formal.png)
 
-**Case Western Reserve University**, School of Engineering and School of Medicine— Cleveland, Ohio
-
+**Case Western Reserve University**, Cleveland, Ohio
+School of Engineering and School of Medicine
 Doctor of Philosophy in Biomedical Engineering (2023 - Current)
 
-![](~/Documents/GitHub/lillyspeier.github.io/images/trine_logo.jpg)
 
-**Trine University**, Allen School of Engineering and Computing— Angola, Indiana
+![](~/Documents/GitHub/lillyspeier.github.io/Education/trine_logo.jpg)
 
+**Trine University**, Angola, Indiana
+Allen School of Engineering and Computing
 Bachelor's of Science in Biomedical Engineering (2018 - 2023)
-:::
+
 
 ::: {style="margin: 30px; text-align: center;"}
 <a class="btn btn-primary" href="https://www.marvinschmitt.com/blog/website-tutorial-quarto/" role="button" target="_blank" style="padding: 15px 30px;">View the tutorial for this template (+ download link)</a>

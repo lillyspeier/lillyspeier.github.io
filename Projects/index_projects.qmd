@@ -4,7 +4,9 @@ title: Projects
 
 ## Generating Complex GBM *In Vitro* Models & Investigating WDR5
 
-![](images/tme_ccf-01.jpg)In the Hubert Lab, we study glioblastoma multiforme (GBM), which is the most aggressive form of primary brain tumor in adults. From a spatial loss-of-function screening, our lab and collaborators have [identified a gene called WDR5](https://doi.org/10.1101/gad.349803.122) as a key component in epigenetic regulation of the perivascular, therapy-resistant niche of our GBM organoids. In order to further investigate the role of WDR5 in GBM, my project aims to enhance our organoid models by adding the elements of vasculature and perfusion. This project is working in collaboration from the [Karumbaiah Lab](https://www.karumbaiahlab.org) at the University of Georgia's Regenerative Bioscience Center. We are still in the very beginning stages of this project, but I will continue to update this section with future updates and publications.
+![](images/tme_ccf-01.jpg)
+
+In the Hubert Lab, we study glioblastoma multiforme (GBM), which is the most aggressive form of primary brain tumor in adults. From a spatial loss-of-function screening, our lab and collaborators have [identified a gene called WDR5](https://doi.org/10.1101/gad.349803.122) as a key component in epigenetic regulation of the perivascular, therapy-resistant niche of our GBM organoids. In order to further investigate the role of WDR5 in GBM, my project aims to enhance our organoid models by adding the elements of vasculature and perfusion. This project is working in collaboration from the [Karumbaiah Lab](https://www.karumbaiahlab.org) at the University of Georgia's Regenerative Bioscience Center. We are still in the very beginning stages of this project, but I will continue to update this section with future updates and publications.
 
 ------------------------------------------------------------------------
 
