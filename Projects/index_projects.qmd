@@ -2,7 +2,7 @@
 title: Projects
 ---
 
-## Generating Complex GBM *In Vitro* Models & Investigating WDR5
+## Generating Complex GBM *In Vitro* Models & Investigating the Role of WDR5
 
 ![](images/tme_ccf-01.jpg)
 
