@@ -89,5 +89,12 @@
     "title": "Projects",
     "section": "",
     "text": "In the Hubert Lab, we study glioblastoma multiforme (GBM), which is the most aggressive form of primary brain tumor in adults. From a spatial loss-of-function screening, our lab and collaborators have identified a gene called WDR5 as a key component in epigenetic regulation of the perivascular, therapy-resistant niche of our GBM organoids. In order to further investigate the role of WDR5 in GBM, my project aims to enhance our organoid models by adding the elements of vasculature and perfusion. This project is working in collaboration from the Karumbaiah Lab at the University of Georgia’s Regenerative Bioscience Center. We are still in the very beginning stages of this project, but I will continue to update this section with future updates and publications."
+  },
+  {
+    "objectID": "blog/index_blog.html",
+    "href": "blog/index_blog.html",
+    "title": "Blog",
+    "section": "",
+    "text": "In this blog post, I will be introducing my BMI & Blood Dashboard, which I have recently added to my website. I created this dashboard by using a Quarto file with the format “dashboard,” and following the tutorials provided. This dashboard contains data from the National Health & Nutrition Examination Survey (NHANES) of 2017-2019 (March, pre-pandemic), which I have filtered to only include complete cases from 2-17 year old children. This study primarily investigates the values within their complete blood count (CBC) with a 5-part differential and body measures data sets, which I have ordered by identifiers within the demographics data set.\nDuring my analysis, I was particularly interested in which variables may serve as predictors of a high BMI (value and group classification), including gender, blood test information, and more. I was most interested in the distribution of negative outcomes, such as abnormal BMI, and thereby created many histograms to effectively display my results in a visually-appealing manner for my audience. In each of my plots, visually, there are no significant differences in distribution of BMI or CBC with differential results based on gender or BMI group classification.\nTo view some of my analyses, click on the “BMI & Blood Dashboard” tab above!\n\nView the tutorial for this template (+ download link)"
   }
 ]

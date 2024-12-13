@@ -316,45 +316,45 @@ plot1
 ##### Monocyte %
 
 ```{r}
-plot1 <- plot_ly(data = study1, x = ~gender, y = ~mono_percent, type = 'violin', box = list(visible = TRUE), 
+plot2 <- plot_ly(data = study1, x = ~gender, y = ~mono_percent, type = 'violin', box = list(visible = TRUE), 
                   line = list(color = "black"), fillcolor = ~ifelse(gender == "Female", "violet", "skyblue")) %>%
   layout(title = "Violin Plot of Monocyte Percentage Based on Gender", 
          xaxis = list(title = "Gender"), 
          yaxis = list(title = "Monocyte Percentage"))
-plot1
+plot2
 ```
 
 ##### Segmented Neutrophil %
 
 ```{r}
-plot1 <- plot_ly(data = study1, x = ~gender, y = ~seg_neut_percent, type = 'violin', box = list(visible = TRUE), 
+plot3 <- plot_ly(data = study1, x = ~gender, y = ~seg_neut_percent, type = 'violin', box = list(visible = TRUE), 
                   line = list(color = "black"), fillcolor = ~ifelse(gender == "Female", "violet", "skyblue")) %>%
   layout(title = "Violin Plot of Segmented Neutrophil Percentage Based on Gender", 
          xaxis = list(title = "Gender"), 
          yaxis = list(title = "Seg. Neutrophil Percentage"))
-plot1
+plot3
 ```
 
 ##### Eosinophil %
 
 ```{r}
-plot1 <- plot_ly(data = study1, x = ~gender, y = ~eosin_percent, type = 'violin', box = list(visible = TRUE), 
+plot4 <- plot_ly(data = study1, x = ~gender, y = ~eosin_percent, type = 'violin', box = list(visible = TRUE), 
                   line = list(color = "black"), fillcolor = ~ifelse(gender == "Female", "violet", "skyblue")) %>%
   layout(title = "Violin Plot of Eosinophil Percentage Based on Gender", 
          xaxis = list(title = "Gender"), 
          yaxis = list(title = "Eosinophil Percentage"))
-plot1
+plot4
 ```
 
 ##### Basophil %
 
 ```{r}
-plot1 <- plot_ly(data = study1, x = ~gender, y = ~baso_percent, type = 'violin', box = list(visible = TRUE), 
+plot5 <- plot_ly(data = study1, x = ~gender, y = ~baso_percent, type = 'violin', box = list(visible = TRUE), 
                   line = list(color = "black"), fillcolor = ~ifelse(gender == "Female", "violet", "skyblue")) %>%
   layout(title = "Violin Plot of Basophil Percentage Based on Gender", 
          xaxis = list(title = "Gender"), 
          yaxis = list(title = "Basophil Percentage"))
-plot1
+plot5
 ```
 
 # Data

@@ -1,0 +1,13 @@
+---
+title: "Blog"
+---
+
+In this blog post, I will be introducing my BMI & Blood Dashboard, which I have recently added to my website. I created this dashboard by using a Quarto file with the format "dashboard," and following the tutorials provided. This dashboard contains data from the National Health & Nutrition Examination Survey (NHANES) of 2017-2019 (March, pre-pandemic), which I have filtered to only include complete cases from 2-17 year old children. This study primarily investigates the values within their complete blood count (CBC) with a 5-part differential and body measures data sets, which I have ordered by identifiers within the demographics data set. 
+
+During my analysis, I was particularly interested in which variables may serve as predictors of a high BMI (value and group classification), including gender, blood test information, and more. I was most interested in the distribution of negative outcomes, such as abnormal BMI, and thereby created many histograms to effectively display my results in a visually-appealing manner for my audience. In each of my plots, visually, there are no significant differences in distribution of BMI or CBC with differential results based on gender or BMI group classification.
+
+To view some of my analyses, click on the "BMI & Blood Dashboard" tab above!
+
+::: {style="margin: 30px; text-align: center;"}
+<a class="btn btn-primary" href="https://www.marvinschmitt.com/blog/website-tutorial-quarto/" role="button" target="_blank" style="padding: 15px 30px;">View the tutorial for this template (+ download link)</a>
+:::
