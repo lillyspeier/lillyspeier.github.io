@@ -1,0 +1,294 @@
+---
+title: "placeholder title"
+subtitle: "optional placeholder"
+author: "Lilly Speier"
+date-modified: last-modified
+format: 
+  html:
+    toc: true
+    number-sections: true
+    date-format: iso
+    embed-resources: true
+    code-overflow: wrap
+    code-tools: true
+    theme: default
+editor: 
+  markdown: 
+    wrap: sentence
+---
+
+# Setup & Data Ingest
+
+```{r, message = FALSE, warning = FALSE}
+require(SASxport) # needed to load NHANES data
+
+library(dplyr)
+library(knitr)
+library(xfun) # for session information
+library(foreign) # needed to load NHANES data
+library(tidyverse)
+
+theme_set(theme_light())  
+knitr::opts_chunk$set(comment=NA)
+```
+
+# Cleaning the Data
+
+```{r}
+# downloaded NHANES 2017-2020 data directly from CDC website 
+# self reminder: remember that directions instructed us not to filter to complete cases
+
+cbc_diff <- read.xport("~/Documents/GitHub/lillyspeier.github.io/data/P_CBC.xpt.txt") %>% # laboratory set, complete blood count (cbc) with 5-part differential in whole blood
+  mutate(identifier = SEQN, wbc_count = LBXWBCSI, platelet_count = LBXPLTSI) %>%
+  filter(complete.cases(wbc_count, platelet_count)) %>%
+  select(identifier, wbc_count, platelet_count)
+
+demographics <- read.xport("~/Documents/GitHub/lillyspeier.github.io/data/P_DEMO.xpt.txt") %>% # demographics data
+  filter(RIDSTATR == 2) %>% # focusing on subjects who have been interviewed and examined 
+  filter(RIDAGEYR >= 2 & RIDAGEYR <= 17 ) %>% # subjects are children aged 2-17 years old
+  mutate(age = RIDAGEYR, identifier = SEQN, gender = RIAGENDR, country_origin = DMDBORN4) %>% # renaming variables
+  mutate(gender_class = case_when(gender == 1 ~ "Male", gender == 2 ~ "Female")) %>% # factors/levels for gender
+  mutate(gender_class = factor(gender_class, levels = c("Male","Female"))) %>%
+  mutate(country_class = case_when(country_origin == 1 ~ "U.S.", country_origin == 2 ~ "Other")) %>% # creating factors/levels for country of origin
+  mutate(country_class = factor(country_class, levels = c("U.S.","Other"))) %>%
+  select(identifier, age, gender, gender_class, country_origin, country_class) # selecting variables of interest
+
+body_measures <- read.xport("~/Documents/GitHub/lillyspeier.github.io/data/P_BMX.xpt.txt") %>% # examination set, body measures data
+  mutate(identifier = SEQN, weight = BMXWT, bmi = BMXBMI, bmi_class = BMDBMIC) %>% # renaming
+  mutate(bmi_group = case_when(bmi_class == 1 ~ "Underweight", bmi_class == 2 ~ "Normal weight", bmi_class == 3 ~ "Overweight", bmi_class == 4 ~ "Obese")) %>% # bmi group levels as outlined in codebook
+  mutate(bmi_group = factor(bmi_group, levels = c("Underweight", "Normal weight", "Overweight", "Obese"))) %>% 
+  filter(complete.cases(weight, bmi, bmi_class, bmi_group)) %>%
+  select(identifier, weight, bmi, bmi_class, bmi_group) # selecting variables of interest
+
+s1 <- left_join(demographics, cbc_diff, by = "identifier") %>% # combine first 2 data sets into new data frame
+  filter(complete.cases(wbc_count, platelet_count))
+
+# not sure why, but s1 and study1 were still including incomplete cases, filtering further based on summary(is.na()) results in console
+
+study1 <- left_join(s1, body_measures, by = "identifier") %>% # final data set
+  filter(complete.cases(weight, bmi, bmi_class, bmi_group)) 
+head(study1) # displaying final data set
+
+# the following variables will only be used for calculations in analysis 1d
+normal_bmi <- study1 %>% 
+  filter(bmi_group == "Normal weight")
+
+high_bmi <- study1 %>% 
+  filter(bmi_group %in% c("Overweight", "Obese"))
+
+male_normal_bmi <- normal_bmi %>% # male subjects with normal BMI 
+  filter(gender_class == "Male")
+
+female_normal_bmi <- normal_bmi %>% # female subjects with normal BMI 
+  filter(gender_class == "Female")
+
+male_high_bmi <- high_bmi %>% # male subjects with high BMI 
+  filter(gender_class == "Male")
+
+female_high_bmi <- high_bmi %>% # female subjects with high BMI
+  filter(gender_class == "Female")
+```
+
+# Codebook & Data Description
+
+This study includes 3383 subjects who are children between the ages of 2 and 17 years old who have complete data on the variables listed in the table below. 
+
+## Codebook
+
+|      Variable      | Type of Variable |    Old Name     |
+|:------------------:|:----------------:|:---------------:|
+|   **identifier**   |        ID        |     `SEQN`      |
+|      **age**       |      Quant       |   `RIDAGEYR`    |
+|     **gender**     |      Binary      |   `RIAGENDR`    |
+|  **gender_class**  |      Binary      | from `RIAGENDR` |
+| **country_origin** |      Binary      |   `DMDBORN4`    |
+| **country_class**  |      Binary      | from `DMDBORN4` |
+|   **wbc_count**    |      Quant       |   `LBXWBCSI`    |
+| **platelet_count** |      Quant       |   `LBXPLTSI`    |
+|     **weight**     |      Quant       |     `BMXWT`     |
+|      **bmi**       |      Quant       |    `BMXBMI`     |
+|   **bmi_class**    |      4-cat       |    `BMDBMIC`    |
+|   **bmi_group**    |      4-cat       | from `BMDBMIC`  |
+
+# Study 1A
+
+<!-- Overall guidance: -->
+
+<!-- 90% confidence level show that each group has 15 distinct values show numerical summaries for variables before analyses -->
+
+## The Question
+
+text
+
+
+<!-- Start by describing what you want to study, and then specify a research question (which should end with a question mark and be something you can resolve with the planned analysis.) -->
+
+<!-- Don’t boil the ocean here. You’re looking for a research question that can be reasonably addressed using your data, so it has to be pretty straightforward. -->
+
+<!-- If you have a pre-existing belief about what will happen, before you look at the data, please feel encouraged to include a statement about that belief before specifying your question. -->
+## Describing the Data
+
+text
+
+<!-- This should start with specifications of what each of the variables you are studying in this analysis actually mean. -->
+
+<!-- Your cleaning, creation of factors and other data management activities for each analysis should already have been shown in earlier sections. Please refer back to that section and don’t repeat what you’ve already done. Be sure that the Codebook you provided describes all variables you are using in your analyses here. -->
+
+<!-- Provide numerical summaries and visualizations of interest that are relevant to the analysis, and comment on any issues you observe. -->
+
+## Main Analysis
+
+<!-- Show your work, and comment on whatever decisions you make. Present and justify the assumptions you are making. -->
+
+```{r}
+# study 1A: compare 2 means of paired samples- natural link with same units; compare white blood cell count vs platelet count (1000 cells/uL)
+
+# analyze the results and build a confidence interval for the population mean difference with an appropriate t-based or bootstrap procedure.
+
+# first showing minimum 15 distinct values
+study1 |> 
+  summarise(across(everything(), ~ n_distinct(.)))
+
+# results show white blood cell count and platelet count variables have 133 and 371 distinct values respectively
+
+# t-test
+t_test1a <- t.test(study1$wbc_count, study1$platelet_count, paired = TRUE)
+print(t_test1a)
+
+# results: -240.33(-291.61, -286.89); p-value = 2.2x10^-16 --> 
+
+```
+
+## Conclusions
+
+text
+
+<!-- Answer your research question, by clearly linking the analytic results to what you were asking at the start. -->
+<!-- If you can see a logical next step for the analysis of the question you asked, specify it. Also, if you specified a pre-existing belief about what would happen, reflect on that in light of the data. -->
+
+# Study 1B
+
+## The Question
+
+text
+
+<!-- Start by describing what you want to study, and then specify a research question (which should end with a question mark and be something you can resolve with the planned analysis.) -->
+
+<!-- Don’t boil the ocean here. You’re looking for a research question that can be reasonably addressed using your data, so it has to be pretty straightforward. -->
+
+<!-- If you have a pre-existing belief about what will happen, before you look at the data, please feel encouraged to include a statement about that belief before specifying your question. -->
+## Describing the Data
+
+text
+
+<!-- This should start with specifications of what each of the variables you are studying in this analysis actually mean. -->
+
+<!-- Your cleaning, creation of factors and other data management activities for each analysis should already have been shown in earlier sections. Please refer back to that section and don’t repeat what you’ve already done. Be sure that the Codebook you provided describes all variables you are using in your analyses here. -->
+
+<!-- Provide numerical summaries and visualizations of interest that are relevant to the analysis, and comment on any issues you observe. -->
+
+## Main Analysis
+
+<!-- Show your work, and comment on whatever decisions you make. Present and justify the assumptions you are making. -->
+
+
+```{r}
+# study 1B: compare 2 means of independent samples; mean BMI of kids born in the U.S. vs. mean BMI of kids born outside of the U.S.
+
+# analyze the results and build a confidence interval for the difference in means with an appropriate t-based or bootstrap procedure. requires  quantitative outcome and a binary categorical variable which divides the data into two subgroups, so that each subgroup has a minimum of 30 observations (here: country of origin has 2 levels, born in the US vs non US born)
+
+```
+
+## Conclusions
+
+text
+
+<!-- Answer your research question, by clearly linking the analytic results to what you were asking at the start. -->
+<!-- If you can see a logical next step for the analysis of the question you asked, specify it. Also, if you specified a pre-existing belief about what would happen, reflect on that in light of the data. -->
+
+# Study 1C
+
+## The Question
+
+text
+
+<!-- Start by describing what you want to study, and then specify a research question (which should end with a question mark and be something you can resolve with the planned analysis.) -->
+
+<!-- Don’t boil the ocean here. You’re looking for a research question that can be reasonably addressed using your data, so it has to be pretty straightforward. -->
+
+<!-- If you have a pre-existing belief about what will happen, before you look at the data, please feel encouraged to include a statement about that belief before specifying your question. -->
+
+## Describing the Data
+
+text
+
+<!-- This should start with specifications of what each of the variables you are studying in this analysis actually mean. -->
+
+<!-- Your cleaning, creation of factors and other data management activities for each analysis should already have been shown in earlier sections. Please refer back to that section and don’t repeat what you’ve already done. Be sure that the Codebook you provided describes all variables you are using in your analyses here. -->
+
+<!-- Provide numerical summaries and visualizations of interest that are relevant to the analysis, and comment on any issues you observe. -->
+
+## Main Analysis
+
+<!-- Show your work, and comment on whatever decisions you make. Present and justify the assumptions you are making. -->
+
+```{r}
+# study 1C: compare 3-6 means of independent samples; mean weight of each BMI group (underweight, normal weight, overweight, obese groups)
+
+# identify 1 quantitative (outcome; here: weight) and 1 categorical variable (multi-categorical with 3-6 levels; here: BMI groups). think about analysis of variance with pre-planned Tukey HSD pairwise comparisons. requires a quantitative outcome (with at least 15 unique values), and a multi-categorical variable which divides the data into subgroups with a minimum of 30 observations.
+```
+
+## Conclusions
+
+text
+
+<!-- Answer your research question, by clearly linking the analytic results to what you were asking at the start. -->
+<!-- If you can see a logical next step for the analysis of the question you asked, specify it. Also, if you specified a pre-existing belief about what would happen, reflect on that in light of the data. -->
+
+# Study 1D
+
+## The Question
+
+text
+
+<!-- Start by describing what you want to study, and then specify a research question (which should end with a question mark and be something you can resolve with the planned analysis.) -->
+
+<!-- Don’t boil the ocean here. You’re looking for a research question that can be reasonably addressed using your data, so it has to be pretty straightforward. -->
+
+<!-- If you have a pre-existing belief about what will happen, before you look at the data, please feel encouraged to include a statement about that belief before specifying your question. -->
+
+## Describing the Data
+
+text
+
+<!-- This should start with specifications of what each of the variables you are studying in this analysis actually mean. -->
+
+<!-- Your cleaning, creation of factors and other data management activities for each analysis should already have been shown in earlier sections. Please refer back to that section and don’t repeat what you’ve already done. Be sure that the Codebook you provided describes all variables you are using in your analyses here. -->
+
+<!-- Provide numerical summaries and visualizations of interest that are relevant to the analysis, and comment on any issues you observe. -->
+
+## Main Analysis
+
+<!-- Show your work, and comment on whatever decisions you make. Present and justify the assumptions you are making. -->
+
+```{r}
+# study 1D: create 2x2 table of independent categorical variables, splitting data into 4 groups; mean male and female heights at normal and high BMIs. groups: mean male height at normal BMI, mean female height at normal BMI, mean male height at high BMI, mean female height at high BMI.
+
+
+
+
+#  identify two categorical (binary) variables. Each cell of the resulting 2 x 2 table should contain a minimum of 30 subjects. focus on the relative risk, odds ratio and risk difference comparisons.
+```
+
+## Conclusions
+
+text
+
+<!-- Answer your research question, by clearly linking the analytic results to what you were asking at the start. -->
+<!-- If you can see a logical next step for the analysis of the question you asked, specify it. Also, if you specified a pre-existing belief about what would happen, reflect on that in light of the data. -->
+
+# Session Information
+
+```{r}
+xfun::session_info()
+```
