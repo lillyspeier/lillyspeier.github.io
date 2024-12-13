@@ -1,0 +1,394 @@
+---
+title: "BMI & Blood Dashboard"
+format: dashboard
+dashboard:
+  scrolling: TRUE
+logo: images/body_scan.jpg
+---
+
+```{r}
+#| label: load-packages
+#| message: false
+
+library(dplyr)
+library(knitr)
+library(foreign) # needed to load NHANES data
+library(readxl)
+library(scales)
+library(plotly) # added for ggplotly() function
+library(DT)
+library(gt)
+library(bslib)
+library(bsicons)
+library(shiny)
+library(reactable)
+library(tidyverse)
+
+theme_set(theme_minimal(base_size = 24, base_family = "sans"))
+```
+
+```{r}
+#| label: load-data
+#| message: false
+
+cbc_diff <- read.xport("data/P_CBC.xpt.txt") %>%
+  mutate(identifier = SEQN, wbc = LBXWBCSI, platelets = LBXPLTSI, rbc = LBXRBCSI, lymph_percent = LBXLYPCT, mono_percent = LBXMOPCT, seg_neut_percent = LBXNEPCT, eosin_percent = LBXEOPCT, baso_percent = LBXBAPCT) %>%
+  filter(complete.cases(wbc, platelets, rbc, lymph_percent, mono_percent, seg_neut_percent, eosin_percent, baso_percent)) %>%
+  select(identifier, wbc, platelets, rbc, lymph_percent, mono_percent, seg_neut_percent, eosin_percent, baso_percent)
+
+demographics <- read.xport("data/P_DEMO.xpt.txt") %>% 
+  filter(RIDSTATR == 2) %>% 
+  filter(RIDAGEYR >= 2 & RIDAGEYR <= 17 ) %>% 
+  mutate(age = RIDAGEYR, identifier = SEQN, gender_code = RIAGENDR, country_code = DMDBORN4) %>% 
+  mutate(gender = case_when(gender_code == 1 ~ "Male", gender_code == 2 ~ "Female")) %>% 
+  mutate(gender = factor(gender, levels = c("Male","Female"))) %>%
+  mutate(country = case_when(country_code == 1 ~ "U.S.", country_code == 2 ~ "Other")) %>%  
+  mutate(country = factor(country, levels = c("U.S.","Other"))) %>%
+  select(identifier, age, gender, country, gender_code, country_code) 
+
+body_measures <- read.xport("data/P_BMX.xpt.txt") %>% 
+  mutate(identifier = SEQN, weight = BMXWT, bmi = BMXBMI, bmi_class = BMDBMIC) %>%
+  mutate(bmi_cat = case_when(bmi_class == 1 ~ "Underweight", bmi_class == 2 ~ "Normal weight", bmi_class == 3 ~ "Overweight", bmi_class == 4 ~ "Obese")) %>% 
+  mutate(bmi_cat = factor(bmi_cat, levels = c("Underweight", "Normal weight", "Overweight", "Obese"))) %>% 
+  filter(complete.cases(weight, bmi, bmi_class, bmi_cat)) %>%
+  select(identifier, weight, bmi, bmi_cat, bmi_class) 
+
+s1 <- left_join(demographics, cbc_diff, by = "identifier") %>% 
+  filter(complete.cases(wbc, platelets))
+
+study1 <- left_join(s1, body_measures, by = "identifier") %>% 
+  filter(complete.cases(weight, bmi, bmi_class, bmi_cat)) %>%
+  select(identifier, age, gender, country, weight, bmi, bmi_cat, wbc, platelets, rbc, lymph_percent, mono_percent, seg_neut_percent, eosin_percent, baso_percent, gender_code, country_code, bmi_class)
+
+normal_bmi <- study1 %>% 
+  filter(bmi_cat == "Normal weight")
+
+high_bmi <- study1 %>% 
+  filter(bmi_cat %in% c("Overweight", "Obese"))
+
+male_normal_bmi <- normal_bmi %>%
+  filter(gender == "Male")
+
+female_normal_bmi <- normal_bmi %>% 
+  filter(gender == "Female")
+
+male_high_bmi <- high_bmi %>%  
+  filter(gender == "Male")
+
+female_high_bmi <- high_bmi %>% 
+  filter(gender == "Female")
+
+male_data <- study1 %>%
+  filter(gender == "Male")
+
+female_data <- study1 %>%
+  filter(gender == "Female")
+
+us_data <- study1 %>%
+  filter(country == "U.S.")
+
+non_us_data <- study1 %>%
+  filter(country == "Other")
+
+```
+
+# Body Measures
+
+## Sidebar {.sidebar}
+
+This dashboard displays statistics generated from the following data:
+
+|  |  |
+|-----------------------------|-------------------------------------------|
+| **Source** | National Health & Nutrition Examination Survey |
+| **Years** | 2017-2020 (March, pre-pandemic) |
+| **Link** | [NHANES link](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?Cycle=2017-2020) |
+
+------------------------------------------------------------------------
+
+The distribution of subject demographics was as follows:
+
+|                    |          |
+|--------------------|----------|
+| **Average age (years)** | 9-10 |
+| **Male (#)**           | 1723     |
+| **Female (#)**         | 1659     |
+| **Born in U.S. (#)**   | 3176     |
+| **Born elsewhere (#)** | 206      |
+
+------------------------------------------------------------------------
+
+## Value Boxes row {height=30%}
+
+```{r}
+valueboxes <- list(
+value_box(
+  title = "Number of subjects",
+  value = "3382 children",
+  showcase = bsicons::bs_icon("emoji-smile-fill"),
+  theme = "purple"
+),
+
+value_box(
+  title = "Average Male BMI",
+  value = "20.23 kg/m²",
+  showcase = bsicons::bs_icon("person-standing"),
+  theme = "green"
+),
+
+value_box(
+  title = "Average Female BMI",
+  value = "20.87 kg/m²",
+  showcase = bsicons::bs_icon("person-standing-dress"),
+  theme = "blue"
+))
+
+layout_column_wrap(fill = FALSE, !!!valueboxes)
+
+```
+
+### BMI Distributions by Gender {height=70%}
+
+#### tabs {.tabset}
+
+##### High Range BMIs
+
+```{r}
+p1 <- ggplot(data = high_bmi, aes(x = bmi, fill = gender))+
+  geom_histogram(bins = 30, col = "black")+
+  scale_fill_manual(values = c("royalblue", "palevioletred")) +
+  labs(title = "Distribution of High Range BMIs by Gender",
+    x = "Body Mass Index (BMI) (kg/m²)", fill = "Gender")
+
+p1_adjust <- ggplotly(p1) %>%
+  layout(title = list(text = "Distribution of High Range BMIs by Gender", font = list(size = 16)),
+    xaxis = list(title = list(text = "Body Mass Index (BMI) (kg/m²)", font = list(size = 14)), 
+                 tickfont = list(size = 12)),
+    yaxis = list(title = list(text = "Count", font = list(size = 14)), tickfont = list(size = 12)),
+    legend = list(title = list(text = "Gender", font = list(size = 14)), 
+                  font = list(size = 12), tickfont = list(size = 12)))
+
+p1_adjust
+```
+
+##### Normal Range BMIs
+```{r}
+p2 <- ggplot(data = normal_bmi, aes(x = bmi, fill = gender))+
+  geom_histogram(bins = 30, col = "black")+
+  scale_fill_manual(values = c("cornflowerblue", "pink")) +
+  labs(title = "Distribution of Normal Range BMIs by Gender",
+    x = "Body Mass Index (BMI) (kg/m^2)", fill = "Gender")
+
+p2_adjust <- ggplotly(p2) %>%
+  layout(title = list(text = "Distribution of Normal Range BMIs by Gender", font = list(size = 16)),
+    xaxis = list(title = list(text = "Body Mass Index (BMI) (kg/m²)", font = list(size = 14)), 
+                 tickfont = list(size = 12)),
+    yaxis = list(title = list(text = "Count", font = list(size = 14)), tickfont = list(size = 12)),
+    legend = list(title = list(text = "Gender", font = list(size = 14)), 
+                  font = list(size = 12), tickfont = list(size = 12)))
+
+p2_adjust
+
+```
+
+##### Low Range BMIs
+```{r}
+low_bmi <- study1 %>%
+  filter(bmi_cat == "Underweight")
+
+p3 <- ggplot(data = low_bmi, aes(x = bmi, fill = gender))+
+  geom_histogram(bins = 30, col = "black")+
+  scale_fill_manual(values = c("steelblue3", "violetred3")) +
+  labs(title = "Distribution of Low Range BMIs by Gender",
+    x = "Body Mass Index (BMI) (kg/m^2)", fill = "Gender")
+
+p3_adjust <- ggplotly(p3) %>%
+  layout(title = list(text = "Distribution of Low Range BMIs by Gender", font = list(size = 16)),
+    xaxis = list(title = list(text = "Body Mass Index (BMI) (kg/m²)", font = list(size = 14)), 
+                 tickfont = list(size = 12)),
+    yaxis = list(title = list(text = "Count", font = list(size = 14)), tickfont = list(size = 12)),
+    legend = list(title = list(text = "Gender", font = list(size = 14)), 
+                  font = list(size = 12), tickfont = list(size = 12)))
+
+p3_adjust
+
+```
+
+##### BMI Groups Pie Chart 
+```{r}
+category_counts <- table(study1$bmi_cat) %>%
+  as.data.frame() %>%
+  mutate(category = Var1, count = Freq) %>%
+  select(category, count)
+
+custom_colors <- c("mediumpurple", "plum", "darkmagenta", "darkslateblue")
+  
+pie_chart <- plot_ly(category_counts, labels = ~category, values = ~count, type = 'pie', textinfo = 'label+percent', marker = list(colors = custom_colors)) %>%
+  layout(title = "Pie Chart of BMI Group Classifications", showlegend = TRUE)
+
+pie_chart
+```
+
+# CBC with Differential
+
+## Sidebar {.sidebar}
+
+This dashboard displays statistics generated from the following data:
+
+|  |  |
+|-----------------------------|-------------------------------------------|
+| **Source** | National Health & Nutrition Examination Survey |
+| **Years** | 2017-2020 (March, pre-pandemic) |
+| **Link** | [NHANES link](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?Cycle=2017-2020) |
+
+------------------------------------------------------------------------
+
+The distribution of subject demographics was as follows:
+
+|                    |          |
+|--------------------|----------|
+| **Average age (years)** | 9-10 |
+| **Male (#)**           | 1724     |
+| **Female (#)**         | 1659     |
+| **Born in U.S. (#)**   | 3177     |
+| **Born elsewhere (#)** | 206      |
+
+------------------------------------------------------------------------
+
+## Blood Data {height=45%}
+
+### tabs {.tabset}
+
+#### White Blood Cell Count by BMI
+
+```{r}
+custom_colors2 <- c("Underweight" = "#8b2bbb", "Normal weight" = "#0cc4ef", "Overweight" = "#1e8b7a",
+                   "Obese" = "#bc1f6d")  
+
+fig <- plot_ly(study1, x = ~wbc, color = ~bmi_cat, type = "box", colors = custom_colors2) %>%
+  layout(title = "Box Plots of White Blood Cell Counts By BMI Group", 
+         xaxis = list(title = "White Blood Cell Count (1000 cells/uL)"))
+fig
+
+```
+
+#### Platelet Count by BMI
+
+```{r}
+custom_colors3 <- c("Underweight" = "#800080", "Normal weight" = "#4186a0", "Overweight" = "#1c2c7c",
+                    "Obese" = "#fb73c9")  
+
+fig <- plot_ly(study1, x = ~platelets, color = ~bmi_cat, type = "box", colors = custom_colors3) %>%
+  layout(title = "Box Plots of Platelet Counts By BMI Group", 
+         xaxis = list(title = "Platelet Count (1000 cells/uL)"))
+fig
+
+```
+
+#### Red Blood Cell Count by BMI
+
+```{r}
+custom_colors3 <- c("Underweight" = "#a2b8cd", "Normal weight" = "#57936e", "Overweight" = "#070987",
+                    "Obese" = "#770737")  
+
+fig <- plot_ly(study1, x = ~rbc, color = ~bmi_cat, type = "box", colors = custom_colors3) %>%
+  layout(title = "Box Plots of Red Blood Cell Counts By BMI Group", 
+         xaxis = list(title = "Platelet Count (million cells/uL)"))
+fig
+
+```
+
+### Violin Plots {height=55%}
+
+#### tabs {.tabset}
+
+##### Lymphocyte %
+
+```{r}
+plot1 <- plot_ly(data = study1, x = ~gender, y = ~lymph_percent, type = 'violin', box = list(visible = TRUE), 
+                  line = list(color = "black"), fillcolor = ~ifelse(gender == "Female", "violet", "skyblue")) %>%
+  layout(title = "Violin Plot of Lymphocyte Percentage Based on Gender", 
+         xaxis = list(title = "Gender"), 
+         yaxis = list(title = "Lymphocyte Percentage"))
+plot1
+```
+
+##### Monocyte %
+
+```{r}
+plot1 <- plot_ly(data = study1, x = ~gender, y = ~mono_percent, type = 'violin', box = list(visible = TRUE), 
+                  line = list(color = "black"), fillcolor = ~ifelse(gender == "Female", "violet", "skyblue")) %>%
+  layout(title = "Violin Plot of Monocyte Percentage Based on Gender", 
+         xaxis = list(title = "Gender"), 
+         yaxis = list(title = "Monocyte Percentage"))
+plot1
+```
+
+##### Segmented Neutrophil %
+
+```{r}
+plot1 <- plot_ly(data = study1, x = ~gender, y = ~seg_neut_percent, type = 'violin', box = list(visible = TRUE), 
+                  line = list(color = "black"), fillcolor = ~ifelse(gender == "Female", "violet", "skyblue")) %>%
+  layout(title = "Violin Plot of Segmented Neutrophil Percentage Based on Gender", 
+         xaxis = list(title = "Gender"), 
+         yaxis = list(title = "Seg. Neutrophil Percentage"))
+plot1
+```
+
+##### Eosinophil %
+
+```{r}
+plot1 <- plot_ly(data = study1, x = ~gender, y = ~eosin_percent, type = 'violin', box = list(visible = TRUE), 
+                  line = list(color = "black"), fillcolor = ~ifelse(gender == "Female", "violet", "skyblue")) %>%
+  layout(title = "Violin Plot of Eosinophil Percentage Based on Gender", 
+         xaxis = list(title = "Gender"), 
+         yaxis = list(title = "Eosinophil Percentage"))
+plot1
+```
+
+##### Basophil %
+
+```{r}
+plot1 <- plot_ly(data = study1, x = ~gender, y = ~baso_percent, type = 'violin', box = list(visible = TRUE), 
+                  line = list(color = "black"), fillcolor = ~ifelse(gender == "Female", "violet", "skyblue")) %>%
+  layout(title = "Violin Plot of Basophil Percentage Based on Gender", 
+         xaxis = list(title = "Gender"), 
+         yaxis = list(title = "Basophil Percentage"))
+plot1
+```
+
+# Data
+
+## Sidebar {.sidebar}
+
+This dashboard displays statistics generated from the following data:
+
+|  |  |
+|-----------------------------|-------------------------------------------|
+| **Source** | National Health & Nutrition Examination Survey |
+| **Years** | 2017-2020 (March, pre-pandemic) |
+| **Link** | [NHANES link](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?Cycle=2017-2020) |
+
+------------------------------------------------------------------------
+
+The distribution of subject demographics was as follows:
+
+|                    |          |
+|--------------------|----------|
+| **Average age (years)** | 9-10 |
+| **Male (#)**           | 1724     |
+| **Female (#)**         | 1659     |
+| **Born in U.S. (#)**   | 3177     |
+| **Born elsewhere (#)** | 206      |
+
+------------------------------------------------------------------------
+
+## description
+
+The table shown below is interactive, allowing users to sort the values in each column from ascending to descending, or vice versa. Click on a column header to try this feature!
+
+### table
+
+```{r}
+reactable(study1)
+```
