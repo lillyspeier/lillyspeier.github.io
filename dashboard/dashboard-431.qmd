@@ -118,7 +118,7 @@ The distribution of subject demographics was as follows:
 
 ------------------------------------------------------------------------
 
-## Value Boxes row {height=30%}
+## Value Boxes row {height=32%}
 
 ```{r}
 valueboxes <- list(
@@ -147,7 +147,7 @@ layout_column_wrap(fill = FALSE, !!!valueboxes)
 
 ```
 
-### BMI Distributions by Gender {height=70%}
+### BMI Distributions by Gender {height=68%}
 
 #### tabs {.tabset}
 

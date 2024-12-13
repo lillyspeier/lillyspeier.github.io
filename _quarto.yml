@@ -24,7 +24,7 @@ website:
       - text: "CV"
         href: CV/index_CV.qmd
       - text: "BMI & Blood Dashboard"
-        href: dashboard/dashboard.qmd       
+        href: dashboard/dashboard-431.qmd       
     
     # your social media handles
     right:
