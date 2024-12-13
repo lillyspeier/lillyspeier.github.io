@@ -1,17 +1,16 @@
 ---
-title: "Labor and Delivery Dashboard"
+title: "BMI & Body Measures Dashboard"
 format: 
   dashboard:
-    nav-buttons: [github]
-    github: https://github.com/mine-cetinkaya-rundel/ld-dashboard
-logo: images/logo.png
+    # nav-buttons: [github]
+    # github: https://github.com/lillyspeier/lillyspeier.github.io
+logo: images/body_scan
 theme: [sandstone, theme/custom.scss]
 fig-width: 10
 fig-asp: 0.3
 params:
-  month: "October"
-  year: "2023"
-  # 2021 rates: https://www.cdc.gov/nchs/data/nvsr/nvsr72/nvsr72-01.pdf
+  year: "2017-2020"
+  # link: https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?Cycle=2017-2020
   us_cesarean_rate: 0.321 
   us_preterm_rate:  0.1049
   threshold_diff: 0.02
@@ -23,11 +22,19 @@ editor_options:
 #| label: load-packages
 #| message: false
 
-library(tidyverse)
+require(SASxport) # needed to load NHANES data
+
+library(dplyr)
+library(knitr)
+library(foreign) # needed to load NHANES data
 library(readxl)
 library(scales)
+library(plotly) # added for ggplotly() function
+library(viridis) # added for color palette
 library(DT)
 library(gt)
+library(tidyverse)
+
 theme_set(theme_minimal(base_size = 24, base_family = "sans"))
 ```
 
@@ -35,30 +42,75 @@ theme_set(theme_minimal(base_size = 24, base_family = "sans"))
 #| label: load-data
 #| message: false
 
-ld <- read_excel("data/ld.xlsx")
+cbc_diff <- read.xport("data/P_CBC.xpt.txt") %>%
+  mutate(identifier = SEQN, wbc_count = LBXWBCSI, platelet_count = LBXPLTSI) %>%
+  filter(complete.cases(wbc_count, platelet_count)) %>%
+  select(identifier, wbc_count, platelet_count)
+
+demographics <- read.xport("data/P_DEMO.xpt.txt") %>% 
+  filter(RIDSTATR == 2) %>% 
+  filter(RIDAGEYR >= 2 & RIDAGEYR <= 17 ) %>% 
+  mutate(age = RIDAGEYR, identifier = SEQN, gender = RIAGENDR, country_origin = DMDBORN4) %>% 
+  mutate(gender_class = case_when(gender == 1 ~ "Male", gender == 2 ~ "Female")) %>% 
+  mutate(gender_class = factor(gender_class, levels = c("Male","Female"))) %>%
+  mutate(country_class = case_when(country_origin == 1 ~ "U.S.", country_origin == 2 ~ "Other")) %>%  
+  mutate(country_class = factor(country_class, levels = c("U.S.","Other"))) %>%
+  select(identifier, age, gender, gender_class, country_origin, country_class) 
+
+body_measures <- read.xport("data/P_BMX.xpt.txt") %>% 
+  mutate(identifier = SEQN, weight = BMXWT, bmi = BMXBMI, bmi_class = BMDBMIC) %>%
+  mutate(bmi_group = case_when(bmi_class == 1 ~ "Underweight", bmi_class == 2 ~ "Normal weight", bmi_class == 3 ~ "Overweight", bmi_class == 4 ~ "Obese")) %>% 
+  mutate(bmi_group = factor(bmi_group, levels = c("Underweight", "Normal weight", "Overweight", "Obese"))) %>% 
+  filter(complete.cases(weight, bmi, bmi_class, bmi_group)) %>%
+  select(identifier, weight, bmi, bmi_class, bmi_group) 
+
+s1 <- left_join(demographics, cbc_diff, by = "identifier") %>% 
+  filter(complete.cases(wbc_count, platelet_count))
+
+study1 <- left_join(s1, body_measures, by = "identifier") %>% 
+  filter(complete.cases(weight, bmi, bmi_class, bmi_group)) 
+head(study1) 
+
+normal_bmi <- study1 %>% 
+  filter(bmi_group == "Normal weight")
+
+high_bmi <- study1 %>% 
+  filter(bmi_group %in% c("Overweight", "Obese"))
+
+male_normal_bmi <- normal_bmi %>%
+  filter(gender_class == "Male")
+
+female_normal_bmi <- normal_bmi %>% 
+  filter(gender_class == "Female")
+
+male_high_bmi <- high_bmi %>%  
+  filter(gender_class == "Male")
+
+female_high_bmi <- high_bmi %>% 
+  filter(gender_class == "Female")
 ```
 
 ```{r}
 #| label: set-inputs
 
-time_period <- paste(params$month, params$year)
+# time_period <- paste(params$month, params$year)
 ```
 
 ```{r}
 #| label: prep-data
 
-ld <- ld |>
-  mutate(
-    delivery_method = str_to_sentence(delivery_method),
-    term = str_to_sentence(term),
-    parity = case_when(
-      parity == "1"  ~ "Nulliparous",
-      parity == "2"  ~ "Primiparous",
-      parity == "3+" ~ "Multiparous"
-    ),
-    parity = fct_relevel(parity, "Nulliparous", "Primiparous", "Multiparous"),
-    maternal_age = fct_relevel(maternal_age, "<20", "20-34", "35+")
-  )
+# ld <- ld |>
+#   mutate(
+#     delivery_method = str_to_sentence(delivery_method),
+#     term = str_to_sentence(term),
+#     parity = case_when(
+#       parity == "1"  ~ "Nulliparous",
+#       parity == "2"  ~ "Primiparous",
+#       parity == "3+" ~ "Multiparous"
+#     ),
+#     parity = fct_relevel(parity, "Nulliparous", "Primiparous", "Multiparous"),
+#     maternal_age = fct_relevel(maternal_age, "<20", "20-34", "35+")
+#   )
 ```
 
 #  {.sidebar}
@@ -86,7 +138,8 @@ In `{r} time_period` the staff breakdown in the unit was as follows:
 ::: {.callout-note collapse="true"}
 ## Disclaimer
 
-This is a fictional hospital. The data are simulated based on realistic birth characteristics and risk factors from [this report by the CDC](https://www.cdc.gov/nchs/data/nvsr/nvsr72/nvsr72-01.pdf).
+This data includes 3383 subjects who are children between the ages of 2 and 17 years old, filtered from the National Health and Nutrition Examination Survey (NHANES) results, [which are publicly available here](https://www.cdc.gov/nchs/data/nvsr/nvsr72/nvsr72-01.pdf).
+
 :::
 
 # All
@@ -95,65 +148,65 @@ This is a fictional hospital. The data are simulated based on realistic birth ch
 #| label: all-values
 #| results: hide
 
-n_births <- nrow(ld)
-
-p_cesarean <- ld |>
-  count(delivery_method) |>
-  mutate(p = n / sum(n)) |>
-  filter(delivery_method == "Cesarean") |>
-  pull(p)
-
-p_cesarean_color <- case_when(
-  between(p_cesarean, params$us_cesarean_rate, params$us_cesarean_rate + params$threshold_diff) ~ "warning",
-  p_cesarean > params$us_cesarean_rate + params$threshold_diff ~ "danger",
-  .default = "light"
-  )
-
-p_preterm <- ld |>
-  count(term) |>
-  mutate(p = n / sum(n)) |>
-  filter(term == "Pre-term") |>
-  pull(p)
-
-p_preterm_color <- case_when(
-  between(p_preterm, params$us_preterm_rate, params$us_preterm_rate + params$threshold_diff) ~ "warning",
-  p_preterm > params$us_preterm_rate + params$threshold_diff ~ "danger",
-  .default = "light"
-  )
-```
-
-## Row {height="20%"}
-
-```{r}
-#| content: valuebox
-#| title: "Total births"
-
-list(
-  icon = "file-medical",
-  color = "primary",
-  value = n_births
-)
-```
-
-```{r}
-#| content: valuebox
-#| title: "Cesarean deliveries"
-
-list(
-  icon = "clipboard2-pulse",
-  color = p_cesarean_color,
-  value = label_percent(accuracy = 0.1)(p_cesarean)
-)
-```
-
-```{r}
-#| content: valuebox
-#| title: "Pre-term births"
-
-list(
-  icon = "calendar-week",
-  color = p_preterm_color,
-  value = label_percent(accuracy = 0.1)(p_preterm)
+# n_births <- nrow(ld)
+# 
+# p_cesarean <- ld |>
+#   count(delivery_method) |>
+#   mutate(p = n / sum(n)) |>
+#   filter(delivery_method == "Cesarean") |>
+#   pull(p)
+# 
+# p_cesarean_color <- case_when(
+#   between(p_cesarean, params$us_cesarean_rate, params$us_cesarean_rate + params$threshold_diff) ~ "warning",
+#   p_cesarean > params$us_cesarean_rate + params$threshold_diff ~ "danger",
+#   .default = "light"
+#   )
+# 
+# p_preterm <- ld |>
+#   count(term) |>
+#   mutate(p = n / sum(n)) |>
+#   filter(term == "Pre-term") |>
+#   pull(p)
+# 
+# p_preterm_color <- case_when(
+#   between(p_preterm, params$us_preterm_rate, params$us_preterm_rate + params$threshold_diff) ~ "warning",
+#   p_preterm > params$us_preterm_rate + params$threshold_diff ~ "danger",
+#   .default = "light"
+#   )
+# ```
+# 
+# ## Row {height="20%"}
+# 
+# ```{r}
+# #| content: valuebox
+# #| title: "Total births"
+# 
+# list(
+#   icon = "file-medical",
+#   color = "primary",
+#   value = n_births
+# )
+# ```
+# 
+# ```{r}
+# #| content: valuebox
+# #| title: "Cesarean deliveries"
+# 
+# list(
+#   icon = "clipboard2-pulse",
+#   color = p_cesarean_color,
+#   value = label_percent(accuracy = 0.1)(p_cesarean)
+# )
+# ```
+# 
+# ```{r}
+# #| content: valuebox
+# #| title: "Pre-term births"
+# 
+# list(
+#   icon = "calendar-week",
+#   color = p_preterm_color,
+#   value = label_percent(accuracy = 0.1)(p_preterm)
 )
 ```
 
