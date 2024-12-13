@@ -118,27 +118,27 @@ The distribution of subject demographics was as follows:
 
 ------------------------------------------------------------------------
 
-## Value Boxes row {height=32%}
+## Value Boxes row {height=20%}
 
 ```{r}
 valueboxes <- list(
 value_box(
   title = "Number of subjects",
-  value = "3382 children",
+  value = tags$p("3382 children", style = "font-size: 200%;"),
   showcase = bsicons::bs_icon("emoji-smile-fill"),
   theme = "purple"
 ),
 
 value_box(
   title = "Average Male BMI",
-  value = "20.23 kg/m²",
+  value = tags$p("20.23 kg/m²", style = "font-size: 200%;"),
   showcase = bsicons::bs_icon("person-standing"),
   theme = "green"
 ),
 
 value_box(
   title = "Average Female BMI",
-  value = "20.87 kg/m²",
+  value = tags$p("20.87 kg/m²", style = "font-size: 200%;"),
   showcase = bsicons::bs_icon("person-standing-dress"),
   theme = "blue"
 ))
@@ -147,7 +147,7 @@ layout_column_wrap(fill = FALSE, !!!valueboxes)
 
 ```
 
-### BMI Distributions by Gender {height=68%}
+### BMI Distributions by Gender {height=80%}
 
 #### tabs {.tabset}
 
