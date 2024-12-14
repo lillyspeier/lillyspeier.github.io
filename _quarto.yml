@@ -24,7 +24,7 @@ website:
       - text: "CV"
         href: CV/index_CV.qmd
       - text: "Blog"
-        href: ~/Documents/GitHub/lillyspeier.github.io/blog/index_blog.qmd
+        href: blog/index_blog.qmd
       - text: "BMI & Blood Dashboard"
         href: dashboard/dashboard-431.qmd
     

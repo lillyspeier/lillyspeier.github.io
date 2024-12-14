@@ -1,8 +1,6 @@
 ---
 title: "BMI & Blood Dashboard"
 format: dashboard
-dashboard:
-  scrolling: TRUE
 logo: images/body_scan.jpg
 ---
 
